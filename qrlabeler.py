@@ -1,3 +1,4 @@
+import os
 import sys
 from tkinter import *
 from tkinter import ttk
@@ -14,6 +15,7 @@ class Window(Frame):
         Frame.__init__(self, master)                   
         self.master = master
 
+        #global variables
         self.data = str()
         self.qr_list = []
         self.qr_size = 1
@@ -21,7 +23,8 @@ class Window(Frame):
         self.filename = str()
         self.page_list = []
         self.card_list = []
-        
+        self.save_location = os.curdir + '/tmp'
+        #tkinter widgets 
         self.qr = Image.new('RGB',(40,40),color='gray')
         self.image = Label(self,image=ImageTk.PhotoImage(self.qr))
         self.image.grid(column=0,row=0,sticky=(N,W))
@@ -109,8 +112,9 @@ class Window(Frame):
 
     def show_pages(self):
         tiff = self.page_list.pop(0)
-        tiff.save('/Users/brendansheehan/Desktop/preview.tiff',"TIFF",save_all=True,append_images=self.page_list)
-        image = Image.open('/Users/brendansheehan/Desktop/preview.tiff')
+        #a more elegant solution might be needed
+        tiff.save(self.save_location + '/preview.tiff',"TIFF",save_all=True,append_images=self.page_list)
+        image = Image.open(self.save_location + '/preview.tiff')
         image.show()
         render = ImageTk.PhotoImage(image)
         preview_window = Toplevel(self)
