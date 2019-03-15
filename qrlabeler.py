@@ -58,13 +58,22 @@ class Window(Frame):
         file.add_command(label="Save", command=self.save)
         file.add_command(label="Save As...", command=self.save_as)
         file.add_command(label="Reset",command=self.reset)
+        file.add_command(label="New window",command=self.new_window)
         menu.add_cascade(label="File", menu=file)
         
         add_qr = ttk.Button(self, text="Add",command=self.add).grid(column=3,row=3)
         rem_qr = ttk.Button(self, text="Remove",command=self.remove).grid(column=4,row=3)
         cancel = ttk.Button(self, text="Clear",command=self.clear).grid(column=5,row=3)
 
-        self.text.focus_set()
+        #self.text.focus_set()
+        self.new_window()
+        
+    def new_window(self):
+        window = Toplevel(root)
+        image = Label(window,image=ImageTk.PhotoImage(self.qr))
+        image.grid(column=0,row=0,sticky=(N,W))
+        image.pack()
+        print(window.__dir__())
 
     def add(self):
         if len(self.data) <= 1:
@@ -111,6 +120,11 @@ class Window(Frame):
                 break
 
     def show_pages(self):
+        preview = Toplevel(root)
+        image = Label(window,image=ImageTk.PhotoImage(self.qr))
+        image.grid(column=0,row=0,sticky=(N,W))
+        image.pack()
+        preview = Toplevel(root)
         tiff = self.page_list.pop(0)
         #a more elegant solution might be needed
         tiff.save(self.save_location + '/preview.tiff',"TIFF",save_all=True,append_images=self.page_list)
@@ -216,7 +230,7 @@ class Window(Frame):
         else:
             self.data = data
             self.label_text = data 
-        print("...")
+        #print("...")
         self.render()
         self.after(500,self.main)
 
